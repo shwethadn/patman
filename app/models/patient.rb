@@ -1,4 +1,7 @@
 class Patient < User
+  has_many :lab_reports
+  has_many :prescriptions
+
   after_create :generate_qr_code
 
   private

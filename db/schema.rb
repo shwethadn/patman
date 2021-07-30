@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_30_145851) do
+ActiveRecord::Schema.define(version: 2021_07_30_153640) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,19 @@ ActiveRecord::Schema.define(version: 2021_07_30_145851) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "asset"
     t.index ["resource_type", "resource_id"], name: "index_assets_on_resource_type_and_resource_id"
+  end
+
+  create_table "lab_reports", force: :cascade do |t|
+    t.string "laboratory"
+    t.string "test"
+    t.bigint "doctor_id", null: false
+    t.date "tested_on"
+    t.bigint "patient_id", null: false
+    t.boolean "approved", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["doctor_id"], name: "index_lab_reports_on_doctor_id"
+    t.index ["patient_id"], name: "index_lab_reports_on_patient_id"
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
@@ -70,6 +83,27 @@ ActiveRecord::Schema.define(version: 2021_07_30_145851) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
+  create_table "prescriptions", force: :cascade do |t|
+    t.string "hospital"
+    t.bigint "doctor_id", null: false
+    t.date "issued_on"
+    t.bigint "patient_id", null: false
+    t.boolean "approved", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["doctor_id"], name: "index_prescriptions_on_doctor_id"
+    t.index ["patient_id"], name: "index_prescriptions_on_patient_id"
+  end
+
+  create_table "record", force: :cascade do |t|
+    t.string "name"
+    t.string "value"
+    t.integer "recordable_id"
+    t.string "recordable_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -86,6 +120,10 @@ ActiveRecord::Schema.define(version: 2021_07_30_145851) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "lab_reports", "users", column: "doctor_id"
+  add_foreign_key "lab_reports", "users", column: "patient_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "prescriptions", "users", column: "doctor_id"
+  add_foreign_key "prescriptions", "users", column: "patient_id"
 end
