@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_30_063519) do
+ActiveRecord::Schema.define(version: 2021_07_30_075543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,8 +65,12 @@ ActiveRecord::Schema.define(version: 2021_07_30_063519) do
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
+    t.string "name", null: false
+    t.integer "mobile", null: false
+    t.string "type", default: "Patient", null: false
+    t.index ["mobile"], name: "index_users_on_mobile", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.check_constraint "(mobile >= '6000000000'::bigint) AND (mobile <= '9999999999'::bigint)", name: "check_mobile_length"
   end
 
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"

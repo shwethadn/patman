@@ -85,6 +85,10 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    devise-doorkeeper (1.2.0)
+      devise
+      doorkeeper
+      rails
     doorkeeper (5.5.0)
       railties (>= 5)
     erubi (1.10.0)
@@ -228,6 +232,7 @@ DEPENDENCIES
   byebug
   capybara (>= 3.26)
   devise
+  devise-doorkeeper
   doorkeeper
   jbuilder (~> 2.7)
   listen (~> 3.3)

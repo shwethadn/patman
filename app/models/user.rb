@@ -3,11 +3,11 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-  # devise :doorkeeper
+  devise :doorkeeper
 
   def generate_access_token
     app = Doorkeeper::Application.first || Doorkeeper::Application.create(
-      name: 'Meesevaa',
+      name: 'Patman',
       redirect_uri: 'urn:ietf:wg:oauth:2.0:oob', scopes: %w[read write]
     )
     Doorkeeper::AccessToken.find_or_create_for(
