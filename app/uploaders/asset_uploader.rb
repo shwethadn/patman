@@ -3,7 +3,7 @@ class AssetUploader < CarrierWave::Uploader::Base
 
   include Cloudinary::CarrierWave
 
-  process :save_content_type_and_size_in_model
+  # process :save_content_type_and_size_in_model
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:

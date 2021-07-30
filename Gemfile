@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.6.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem 'rails', '6.0.3.7'
+gem 'rails', '~> 6.0.3', '>= 6.0.3.7'
 gem "rqrcode", '~> 2.0'
 gem 'carrierwave', '~> 0.11.2'
 gem 'cloudinary', '~> 1.13.2'
@@ -50,7 +50,6 @@ group :development do
   gem 'rack-mini-profiler', '~> 2.0'
   gem 'listen', '~> 3.3'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
 end
 
 group :test do
