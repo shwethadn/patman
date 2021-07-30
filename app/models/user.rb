@@ -14,6 +14,7 @@ class User < ApplicationRecord
       application: app, resource_owner: self, scopes: 'user read and write preference',
       expires_in: 24.hours, use_refresh_token: true
     )
+  end
 
   # validates :email, uniqueness: true
   validates :mobile, uniqueness: true
