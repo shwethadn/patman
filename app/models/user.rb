@@ -5,6 +5,11 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   devise :doorkeeper
 
+  has_one :qr_code, -> { where(document_type: 'qr_code') }, class_name: 'Asset',
+    as: :resource, dependent: :destroy
+
+  after_create :generate_qr_code
+
   def generate_access_token
     app = Doorkeeper::Application.first || Doorkeeper::Application.create(
       name: 'Patman',
@@ -38,7 +43,13 @@ class User < ApplicationRecord
     false
   end
 
+  private
+
   def profile_data
     attributes.slice('mobile', 'name', 'type')
+  end
+
+  def generate_qr_code
+    
   end
 end

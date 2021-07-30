@@ -2,18 +2,31 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `bin/rails
-# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `rails
+# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_30_075543) do
+ActiveRecord::Schema.define(version: 2021_07_30_134609) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "assets", force: :cascade do |t|
+    t.string "name"
+    t.string "document_type"
+    t.string "resource_type"
+    t.bigint "resource_id"
+    t.text "note"
+    t.boolean "is_active", default: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.json "assets"
+    t.index ["resource_type", "resource_id"], name: "index_assets_on_resource_type_and_resource_id"
+  end
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.bigint "resource_owner_id", null: false
@@ -70,7 +83,6 @@ ActiveRecord::Schema.define(version: 2021_07_30_075543) do
     t.string "type", default: "Patient", null: false
     t.index ["mobile"], name: "index_users_on_mobile", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.check_constraint "(mobile >= '6000000000'::bigint) AND (mobile <= '9999999999'::bigint)", name: "check_mobile_length"
   end
 
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
