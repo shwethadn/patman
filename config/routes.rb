@@ -14,6 +14,18 @@ Rails.application.routes.draw do
           get :me
         end
       end
+
+      resources :lab_reports do
+        collection do
+          post :approve
+        end
+      end
+
+      resources :prescriptions do
+        collection do
+          post :approve
+        end
+      end
     end
   end
 end

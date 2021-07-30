@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  hospital: MyString
+  doctor: one
+  issued_on: 2021-07-30
+  patient: one
+
+two:
+  hospital: MyString
+  doctor: two
+  issued_on: 2021-07-30
+  patient: two

@@ -11,6 +11,8 @@ gem 'cloudinary', '~> 1.13.2'
 gem 'mini_magick'
 # Devise
 gem 'devise'
+# RTesseract
+gem 'rtesseract'
 gem 'doorkeeper'
 gem 'devise-doorkeeper'
 # Use postgresql as the database for Active Record
