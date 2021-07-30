@@ -28,7 +28,6 @@ class Api::V1::UsersController < Api::V1::BaseController
   end
 
   def sign_out
-    byebug
     doorkeeper_token.try(:revoke)
     render json: { success: true, message: 'You have successfully logged out' }
   end
