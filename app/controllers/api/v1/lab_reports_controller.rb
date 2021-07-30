@@ -26,6 +26,7 @@ class Api::V1::LabReportsController < Api::V1::BaseController
   private
 
   def lab_report_params
-    params.permit(:laboratory, :test, :doctor_id, :tested_on, :patient_id)
+    params.permit(:laboratory, :test, :doctor_id, :tested_on, :patient_id,
+                  assets_attributes: [:id, :asset, :_delete])
   end
 end

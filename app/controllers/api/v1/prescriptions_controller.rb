@@ -26,6 +26,7 @@ class Api::V1::PrescriptionsController < Api::V1::BaseController
   private
 
   def prescription_params
-    params.permit(:hospital, :doctor_id, :issued_on, :patient_id)
+    params.permit(:hospital, :doctor_id, :issued_on, :patient_id,
+                  assets_attributes: [:id, :asset, :_delete])
   end
 end
