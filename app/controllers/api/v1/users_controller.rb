@@ -1,5 +1,6 @@
 class Api::V1::UsersController < Api::V1::BaseController
   before_action :doorkeeper_authorize!, except: %i[sign_up sign_in sign_out]
+  before_action :authenticate_user!, except: %i[sign_up sign_in sign_out]
   skip_before_action :verify_authenticity_token
 
   def me
