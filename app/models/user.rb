@@ -37,4 +37,8 @@ class User < ApplicationRecord
   def will_save_change_to_email?
     false
   end
+
+  def profile_data
+    attributes.slice('mobile', 'name', 'type')
+  end
 end

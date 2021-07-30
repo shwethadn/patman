@@ -1,5 +1,5 @@
 class Api::V1::UsersController < Api::V1::BaseController
-  before_action :authenticate_user!, except: %i[sign_up sign_in sign_out]
+  before_action :doorkeeper_authorize!, except: %i[sign_up sign_in sign_out]
   skip_before_action :verify_authenticity_token
 
   def me
@@ -7,34 +7,35 @@ class Api::V1::UsersController < Api::V1::BaseController
   end
 
   def sign_up
-    user = User.where('mobile = ?', user_params[:mobile]).first
+    user = User.find_by(mobile: params[:mobile])
     if user.nil?
       msg = 'You were registered successfully'
       user = User.create(user_params)
-      render json: { success: true, message: msg, response: user.generate_access_token.token }
+      render json: { success: true, message: msg, access_token: user.generate_access_token.token }
     else
-      render json: { success: false, message: 'User Already exists. Please login', response: nil }, status: :bad_request
+      render json: { success: false, message: 'User Already exists. Please login' }, status: :bad_request
     end
   end
 
   def sign_in
-    user = User.where('mobile = ?', user_params[:mobile]).first
+    user = User.find_by(mobile: params[:mobile])
     if !user.nil? && user.valid_password?(user_params[:password])
       token = user.generate_access_token.token
-      render json: { success: true, access_token: token, message: 'Authentication successful', response: nil }
+      render json: { success: true, access_token: token, message: 'Authentication successful' }
     else
-      render json: { success: false, message: 'mobile or password is wrong', response: nil }, status: :unauthorized
+      render json: { success: false, message: 'mobile or password is wrong' }, status: :unauthorized
     end
   end
 
   def sign_out
+    byebug
     doorkeeper_token.try(:revoke)
-    render json: { success: true, message: 'You have successfully logged out', response: nil }
+    render json: { success: true, message: 'You have successfully logged out' }
   end
 
   private
 
   def user_params
-    params.permit(:mobile, :password)
+    params.permit(:mobile, :password, :type, :name)
   end
 end

@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 2021_07_30_075543) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "name", null: false
-    t.integer "mobile", null: false
+    t.bigint "mobile", null: false
     t.string "type", default: "Patient", null: false
     t.index ["mobile"], name: "index_users_on_mobile", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
