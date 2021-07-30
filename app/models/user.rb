@@ -8,7 +8,7 @@ class User < ApplicationRecord
   has_one :qr_code, -> { where(document_type: 'qr_code') }, class_name: 'Asset',
     as: :resource, dependent: :destroy
 
-  after_create :generate_qr_code
+  before_create :add_uid
 
   def generate_access_token
     app = Doorkeeper::Application.first || Doorkeeper::Application.create(
@@ -43,13 +43,13 @@ class User < ApplicationRecord
     false
   end
 
-  private
-
-  def profile_data
-    attributes.slice('mobile', 'name', 'type')
+  def add_uid
+    self.uid = SecureRandom.uuid
   end
 
-  def generate_qr_code
-    
+  def profile_data
+    hash = attributes.slice('mobile', 'name', 'type', 'uid')
+    hash[:qr_code] = qr_code.asset.url
+    hash
   end
 end
