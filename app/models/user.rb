@@ -3,6 +3,18 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+  devise :doorkeeper
+
+  def generate_access_token
+    app = Doorkeeper::Application.first || Doorkeeper::Application.create(
+      name: 'Patman',
+      redirect_uri: 'urn:ietf:wg:oauth:2.0:oob', scopes: %w[read write]
+    )
+    Doorkeeper::AccessToken.find_or_create_for(
+      application: app, resource_owner: self, scopes: 'user read and write preference',
+      expires_in: 24.hours, use_refresh_token: true
+    )
+  end
 
   # validates :email, uniqueness: true
   validates :mobile, uniqueness: true
@@ -24,5 +36,9 @@ class User < ApplicationRecord
 
   def will_save_change_to_email?
     false
+  end
+
+  def profile_data
+    attributes.slice('mobile', 'name', 'type')
   end
 end
