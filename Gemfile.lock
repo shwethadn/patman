@@ -285,6 +285,7 @@ DEPENDENCIES
   pundit
   rack-mini-profiler (~> 2.0)
   rails (~> 6.0.3, >= 6.0.3.7)
+  resque
   rqrcode (~> 2.0)
   rtesseract
   sass-rails (>= 6)
