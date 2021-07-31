@@ -45,6 +45,6 @@ class User < ApplicationRecord
   end
 
   def profile_data
-    attributes.slice('mobile', 'name', 'type', 'uid')
+    attributes.slice('id', 'mobile', 'name', 'type', 'uid')
   end
 end

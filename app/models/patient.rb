@@ -10,7 +10,7 @@ class Patient < User
     as: :resource, dependent: :destroy
 
   def profile_data
-    hash = attributes.slice('mobile', 'name', 'type', 'uid')
+    hash = attributes.slice('id', 'mobile', 'name', 'type', 'uid')
     hash[:qr_code] = qr_code.asset_url
     hash
   end
