@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_30_153640) do
+ActiveRecord::Schema.define(version: 2021_07_31_043948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,14 @@ ActiveRecord::Schema.define(version: 2021_07_30_153640) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "asset"
     t.index ["resource_type", "resource_id"], name: "index_assets_on_resource_type_and_resource_id"
+  end
+
+  create_table "doctors_patients", force: :cascade do |t|
+    t.bigint "doctor_id"
+    t.bigint "patient_id"
+    t.boolean "approved", default: false
+    t.index ["doctor_id"], name: "index_doctors_patients_on_doctor_id"
+    t.index ["patient_id"], name: "index_doctors_patients_on_patient_id"
   end
 
   create_table "lab_reports", force: :cascade do |t|
@@ -120,6 +128,8 @@ ActiveRecord::Schema.define(version: 2021_07_30_153640) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "doctors_patients", "users", column: "doctor_id"
+  add_foreign_key "doctors_patients", "users", column: "patient_id"
   add_foreign_key "lab_reports", "users", column: "doctor_id"
   add_foreign_key "lab_reports", "users", column: "patient_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"

@@ -26,6 +26,17 @@ Rails.application.routes.draw do
           post :approve
         end
       end
+
+      resources :doctors do
+        collection do
+          post :patient_request
+        end
+      end
+
+      resources :patients do
+        collection do
+        end
+      end
     end
   end
 end

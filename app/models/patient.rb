@@ -1,6 +1,8 @@
 class Patient < User
   has_many :lab_reports
   has_many :prescriptions
+  has_many :doctors_patients
+  has_many :doctors, through: :doctors_patients
 
   after_create :generate_qr_code
 
