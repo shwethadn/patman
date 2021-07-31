@@ -20,6 +20,14 @@ class User {
   requestPatient(values): Promise<Object> {
     return service.post('/doctors/patient_request?uid='+values.uid, values);
   }
+
+  getLabReports(values): Promise<Object> {
+    return service.get('/lab_reports?patient_id='+values.id, values);
+  }
+
+  getPrescriptions(values): Promise<Object> {
+    return service.get('/prescriptions?patient_id='+values.id, values);
+  }
 }
 
 export default new User();

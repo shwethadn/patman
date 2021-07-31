@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
 import {
 	StyleSheet,
 	Text,
@@ -8,16 +7,12 @@ import {
 	TouchableOpacity,
 	FlatList,
 	ActivityIndicator,
-	Alert
+	Alert,
 } from 'react-native';
-import { CommonActions } from '@react-navigation/native';
 import Block from '../../components/block';
-import Header from '../../components/header';
-import { Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { colors } from '../../utils/colors';
 import API from '../../api';
-import { TextInput } from 'react-native-gesture-handler';
 
 const Prescription = (props) => {
 
@@ -25,62 +20,25 @@ const Prescription = (props) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+		getPrescriptions();
   }, []);
 
-	const getApprovalDetails = () => {
-
+	const getPrescriptions = async () => {
+		try {
+			let params = {
+				patient_id: 2,
+			};
+      let response = await API.getPrescriptions(params);
+			console.log(response);
+    } catch (err) {
+      console.log('Profile ERROR CATCH', err);
+    }
 	};
 
-	const onAccept = async () => {
-		
-	}
-
-	const onReject = async () => {
-		
-	}
-
-	const acceptWarning = () => {
-		Alert.alert(
-			'Approve',
-			'Are you sure you want to approve the request?',
-			[
-				{
-					text: 'Cancel',
-					onPress: () => null,
-				},
-				{
-					text: 'Yes',
-					onPress: () => {
-						onAccept(null);
-					},
-				},
-			],
-		);
-	}
-
-	const rejectWarning = () => {
-		Alert.alert(
-			'Reject',
-			'Are you sure you want to reject the request?',
-			[
-				{
-					text: 'Cancel',
-					onPress: () => null,
-				},
-				{
-					text: 'Yes',
-					onPress: () => {
-						onReject();
-					},
-				},
-			],
-		);
-	}
-
-	const approveItem = (item, index) => {
+	const prescriptionItem = (item, index) => {
 		return (
 			<Block style={{width: '90%'}}>
-				<Text>Approval 1</Text>
+				<Text>Prescription</Text>
 			</Block>
 		);
 	};
@@ -93,35 +51,23 @@ const Prescription = (props) => {
 					<Text>Patient name: Lohith</Text>
 					<Text>Date: 31 Jul 2021</Text>
 				</TouchableOpacity>
-				{/* <Block style={styles.actionIconBlock}>
-					<TouchableOpacity onPress={() => acceptWarning()}
-						style={styles.actionIconContainer}>
-						<Icon name="check" size={35} color={colors.$accept} />
-					</TouchableOpacity>
-				</Block>
-				<Block style={styles.actionIconBlock}>
-					<TouchableOpacity onPress={() => rejectWarning()}
-						style={styles.actionIconContainer}>
-						<Icon name="times" size={35} color={colors.$reject} />
-					</TouchableOpacity>
-				</Block> */}
 			</Block>
 		);
 	};
 
 	const renderApprovalDetails= () => {
-    let apList = doctorStore.approvals;
+    let apList = dataStore.prescriptions;
     if (apList) {
       if (apList.length > 0) {
         return (
           <Block>
             <FlatList
               data={apList}
-              renderItem={({ item, index }) => approveItem(item, index)}
+              renderItem={({ item, index }) => prescriptionItem(item, index)}
               keyExtractor={(item) => item.id}
               onEndReachedThreshold={1}
               refreshing={refreshing}
-              onRefresh={() => getApprovalDetails()}
+              onRefresh={() => getPrescriptions()}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.flatListContainer}
@@ -142,23 +88,6 @@ const Prescription = (props) => {
         </Block>
       );
     }
-  };
-
-	const renderHeader = () => {
-    return (
-      <Header>
-				<Header.Left>
-					<TouchableOpacity style={styles.headerBack}
-						onPress={() => props.navigation.goBack()}>
-            <Icon name="angle-left" size={24} color={colors.$secondary} />
-          </TouchableOpacity>
-        </Header.Left>
-        <Header.Body>
-					<Text style={styles.headerText}>Approvals</Text>
-        </Header.Body>
-				<Header.Right/>
-      </Header>
-    );
   };
 
   return (

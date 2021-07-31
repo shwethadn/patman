@@ -12,7 +12,6 @@ import { Icon, Header } from 'react-native-elements';
 import { RNCamera } from 'react-native-camera';
 import BLOCK from './block';
 import GalleryPicker from 'react-native-image-picker';
-// import NHT_TEXT from '../../components/Text';
 import NHT_HEADER from './header';
 import { SvgXml } from 'react-native-svg';
 import CameraCapture from '../utils/images/cameraCapture';
@@ -249,7 +248,6 @@ const styles = StyleSheet.create({
   },
   headerBodyText: {
     color: '#000000',
-    // fontFamily: "sf-ui-display-medium",
     fontSize: 16,
     fontWeight: '600',
   },
@@ -264,8 +262,6 @@ const styles = StyleSheet.create({
   },
   permissionText: {
     color: '#141414',
-    fontFamily:
-      Platform.OS === 'ios' ? 'OpenSans-Regular' : 'OpenSans_Regular',
     fontSize: 16,
     lineHeight: 24,
     paddingTop: 5,

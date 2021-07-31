@@ -56,7 +56,7 @@ const Approvals = (props) => {
 				},
 			],
 		);
-	}
+	};
 
 	const rejectWarning = () => {
 		Alert.alert(
@@ -75,7 +75,7 @@ const Approvals = (props) => {
 				},
 			],
 		);
-	}
+	};
 
 	const approveItem = (item, index) => {
 		return (

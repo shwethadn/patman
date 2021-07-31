@@ -65,6 +65,7 @@ function MyStack() {
 			screenOptions={{
 				headerShown: false,
 			}}>
+      <Stack.Screen name="Profile" component={Profile} options={slideOptions} />
 			<Stack.Screen
 				name="SplashScreen"
 				component={SplashScreen}
@@ -74,7 +75,6 @@ function MyStack() {
 			<Stack.Screen name="SignUp" component={SignUp} options={slideOptions} />
       <Stack.Screen name="Scanner" component={Scanner} options={slideOptions} />
       <Stack.Screen name="Landing" component={Landing} options={slideOptions} />
-      <Stack.Screen name="Profile" component={Profile} options={slideOptions} />
       <Stack.Screen name="DoctorDashboard" component={DoctorDashboard} options={slideOptions} />
       <Stack.Screen name="DoctorApprovals" component={DoctorApprovals} options={slideOptions} />
       <Stack.Screen name="PatientDashboard" component={PatientDashboard} options={slideOptions} />

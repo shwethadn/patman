@@ -76,8 +76,8 @@ const PatientDetails = (props) => {
 					/>
 				</Block>
 			</Block>
-		)
-	}
+		);
+	};
 
   return (
     <>
@@ -87,9 +87,8 @@ const PatientDetails = (props) => {
         hidden={false}
       />
       {renderSerachBar()}
-			
       <Block paddingX style={styles.container}>
-				<Text style={styles.buttonText}>Patient Details</Text>
+				<Text style={styles.buttonText}></Text>
       </Block>
     </>
   );

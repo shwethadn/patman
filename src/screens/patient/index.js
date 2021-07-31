@@ -1,12 +1,15 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
-import { StyleSheet, Text, Image, StatusBar, TouchableOpacity, Dimensions } from 'react-native';
-import { CommonActions } from '@react-navigation/native';
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  Image,
+  StatusBar,
+  TouchableOpacity,
+  Dimensions
+} from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Block from '../../components/block';
 import Header from '../../components/header';
-import { Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { colors } from '../../utils/colors';
 import API from '../../api';
@@ -15,80 +18,32 @@ import LabReport from './labReport';
 
 
 const PatientDashboard = (props) => {
-
-  const [mobile, setMobile] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
   const [selectedTab, setSelectedTab] = useState(1);
 
-  useEffect(() => {
-  }, []);
-
-  const signout = async () => {
-    setLoading(true);
-    try {
-      let response = await API.signOut();
-      const resetAction = CommonActions.reset({
-        index: 0,
-        routes: [{ name: 'SplashScreen' }],
-      });
-      props.navigation.dispatch(resetAction);
-      console.log("signout",response);
-    } catch (err) {
-      console.log('LOGIN ERROR CATCH', err);
-      setLoading(false);
-    }
-  };
-
-  const renderGridTiles = () => {
-    return (
-      <Block row style={{justifyContent: 'center', backgroundColor: 'transparent'}}>
-        <TouchableOpacity style={{backgroundColor: colors.$secondary, width: '100%', height: 100,
-            marginHorizontal: 10, marginVertical: 20, borderRadius: 15,
-            justifyContent: 'center', alignItems: 'center'}}>
-          <Block style={{backgroundColor: colors.$secondary, width: '100%', height: 100,
-            marginHorizontal: 10, marginVertical: 20, borderRadius: 15,
-            justifyContent: 'center', alignItems: 'center'}}>
-              <Icon name="book" size={60} color={colors.$primary} />
-          </Block>
-        </TouchableOpacity>
-        <TouchableOpacity style={{backgroundColor: colors.$secondary, width: '40%', height: 100,
-            marginHorizontal: 10, marginVertical: 20, borderRadius: 15,
-            justifyContent: 'center', alignItems: 'center'}}>
-          <Block style={{backgroundColor: colors.$secondary, width: '40%', height: 100,
-            marginHorizontal: 10, marginVertical: 20, borderRadius: 15,
-            justifyContent: 'center', alignItems: 'center'}}>
-              <Icon name="list" size={60} color={colors.$primary} />
-          </Block>
-        </TouchableOpacity>
-      </Block>
-    );
-  }
-
-  const renderTiles = () => {
-    return (
-      <Block style={{justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent'}}>
-        <TouchableOpacity style={{backgroundColor: colors.$secondary, width: '60%', height: 100,
-            marginHorizontal: 10, marginVertical: 40, borderRadius: 15,
-            justifyContent: 'center', alignItems: 'center'}}>
-          <Block style={{backgroundColor: colors.$secondary, width: '100%', height: 100,
-            marginHorizontal: 10, marginVertical: 20, borderRadius: 15,
-            justifyContent: 'center', alignItems: 'center'}}>
-              <Icon name="book" size={60} color={colors.$primary} />
-          </Block>
-        </TouchableOpacity>
-        <TouchableOpacity style={{backgroundColor: colors.$secondary, width: '60%', height: 100,
-            marginHorizontal: 10, marginVertical: 20, borderRadius: 15,
-            justifyContent: 'center', alignItems: 'center'}}>
-          <Block style={{backgroundColor: colors.$secondary, width: '100%', height: 100,
-            marginHorizontal: 10, marginVertical: 20, borderRadius: 15,
-            justifyContent: 'center', alignItems: 'center'}}>
-              <Icon name="list" size={60} color={colors.$primary} />
-          </Block>
-        </TouchableOpacity>
-      </Block>
-    );
-  };
+  // const renderGridTiles = () => {
+  //   return (
+  //     <Block row style={{justifyContent: 'center', backgroundColor: 'transparent'}}>
+  //       <TouchableOpacity style={{backgroundColor: colors.$secondary, width: '100%', height: 100,
+  //           marginHorizontal: 10, marginVertical: 20, borderRadius: 15,
+  //           justifyContent: 'center', alignItems: 'center'}}>
+  //         <Block style={{backgroundColor: colors.$secondary, width: '100%', height: 100,
+  //           marginHorizontal: 10, marginVertical: 20, borderRadius: 15,
+  //           justifyContent: 'center', alignItems: 'center'}}>
+  //             <Icon name="book" size={60} color={colors.$primary} />
+  //         </Block>
+  //       </TouchableOpacity>
+  //       <TouchableOpacity style={{backgroundColor: colors.$secondary, width: '40%', height: 100,
+  //           marginHorizontal: 10, marginVertical: 20, borderRadius: 15,
+  //           justifyContent: 'center', alignItems: 'center'}}>
+  //         <Block style={{backgroundColor: colors.$secondary, width: '40%', height: 100,
+  //           marginHorizontal: 10, marginVertical: 20, borderRadius: 15,
+  //           justifyContent: 'center', alignItems: 'center'}}>
+  //             <Icon name="list" size={60} color={colors.$primary} />
+  //         </Block>
+  //       </TouchableOpacity>
+  //     </Block>
+  //   );
+  // };
 
   const floatButton = () => {
     console.log(selectedTab);
@@ -170,7 +125,6 @@ const PatientDashboard = (props) => {
       {renderHeader()}
       <Block style={styles.container}>
         {/* {renderGridTiles()} */}
-        {/* {renderTiles()} */}
         {topTabs()}
         {floatButton()}
       </Block>
@@ -182,10 +136,8 @@ export default PatientDashboard;
 
 const styles = StyleSheet.create({
   container: {
-    // alignItems: 'center',
     backgroundColor: colors.$primary,
     flex: 1,
-    // justifyContent: 'center',
   },
   patImage: {
     height: 30,

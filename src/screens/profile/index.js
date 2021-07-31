@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Keyboard,
   ActivityIndicator,
+	Alert,
   Image,
 } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
@@ -26,6 +27,7 @@ const Profile = observer((props) => {
   const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+	const [role, setRole] = useState(null);
 
   useEffect(() => {
 		userDetails();
@@ -34,13 +36,13 @@ const Profile = observer((props) => {
   const userDetails = async () => {
     try {
       let response = await API.me();
-			console.log(response);
+			if (response && response.response) {
+				setRole(response.response.type);
+			}
     } catch (err) {
       console.log('Profile ERROR CATCH', err);
     }
   };
-
-
 
 	const signout = async () => {
     setLoading(true);
@@ -51,35 +53,75 @@ const Profile = observer((props) => {
         routes: [{ name: 'SplashScreen' }],
       });
       props.navigation.dispatch(resetAction);
-      console.log("signout",response);
     } catch (err) {
       console.log('LOGIN ERROR CATCH', err);
       setLoading(false);
     }
   };
 
+	const logoutWarning = () => {
+		Alert.alert(
+			'Logout',
+			'Are you sure you want to logout?',
+			[
+				{
+					text: 'Cancel',
+					onPress: () => null,
+				},
+				{
+					text: 'Yes',
+					onPress: () => {
+						signout();
+					},
+				},
+			],
+		);
+	};
+
+	const renderQRcode = () => {
+		if (role === 'Patient' && userStore.currentUser) {
+			let qrcodeURL = 'http://res.cloudinary.com/progton/image/upload/v1627659174/development/User/2/qr_code/aaefc117-fb60-4074-99f5-c423af454bf4.png.png'
+			return (
+				<Block style={[styles.infoContainer, {justifyContent: 'center', alignItems: 'center'}]}>
+					<Text style={styles.qrCodeText}>QR Code</Text>
+					<Image
+						resizeMode={'cover'}
+						style={styles.qrCode}
+						source={{
+							uri: userStore.currentUser && userStore.currentUser.qr_code ? userStore.currentUser.qr_code : qrcodeURL,
+						}}/>
+				</Block>
+			);
+		} else {
+			return null;
+		}
+	};
+
+	const userDataItem = (txt, iconName) => {
+		return (
+			<Block row style={styles.infoContainer}>
+				<Icon style={styles.iconContainer} name={iconName} size={20} color={colors.$secondary} />
+				<Text style={styles.infoText}>
+					{userStore.currentUser.mobile}
+				</Text>
+			</Block>
+		);
+	};
+
 	const renderUserData = () => {
-		console.log(userStore.currentUser, "userStore.currentUser")
 		if (userStore.currentUser) {
 			return (
 				<Block flex style={styles.infoContainer}>
-					<Block row style={styles.infoContainer}>
-						<Icon style={styles.iconContainer} name="user" size={20} color={colors.$secondary} />
-						<Text style={styles.infoText}>
-							{userStore.currentUser.name}
-						</Text>
-					</Block>
-					<Block row style={styles.infoContainer}>
-						<Icon style={styles.iconContainer} name="phone" size={20} color={colors.$secondary} />
-						<Text style={styles.infoText}>
-							{userStore.currentUser.mobile}
-						</Text>
-					</Block>
+					{userDataItem(userStore.currentUser.name, 'user')}
+					{userDataItem(userStore.currentUser.mobile, 'phone')}
+					{renderQRcode()}
 				</Block>
 			);
 		} else {
 			return (
-				<ActivityIndicator color={colors.$primary}/>
+				<Block style={styles.infoContainer}>
+					<ActivityIndicator color={colors.$secondary}/>
+				</Block>
 			);
 		}
 	};
@@ -96,7 +138,11 @@ const Profile = observer((props) => {
         <Header.Body>
 					<Text style={styles.headerText}>Profile</Text>
         </Header.Body>
-				<Header.Right/>
+				<Header.Right>
+					<TouchableOpacity onPress={() => logoutWarning()}>
+						<Text style={styles.buttonText}>Logout</Text>
+					</TouchableOpacity>
+				</Header.Right>
       </Header>
     );
   };
@@ -111,9 +157,7 @@ const Profile = observer((props) => {
 			{renderHeader()}
       <Block flex paddingX style={styles.container}>
 				{renderUserData()}
-				<TouchableOpacity onPress={() => signout()}>
-          <Text style={styles.buttonText}>Signout</Text>
-        </TouchableOpacity>
+				{renderQRcode()}
       </Block>
     </>
   );
@@ -125,7 +169,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     backgroundColor: colors.$primary,
-    // flex: 1,
   },
   patImage: {
     marginTop: 50,
@@ -151,9 +194,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: colors.$secondaryBold,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
-		paddingBottom: 50,
   },
 	infoContainer: {
 		marginTop: 20,
@@ -172,6 +214,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.$primary,
     marginTop: 20,
   },
+	qrCodeText: {
+		paddingVertical: 10,
+		color: colors.$secondary,
+    fontSize: 14,
+    fontWeight: 'bold',
+	},
   newUserText: {
     color: colors.$secondary,
     fontSize: 14,
@@ -181,4 +229,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
   },
+	qrCode: {
+		height: 200,
+		width: 200,
+	},
 });

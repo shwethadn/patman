@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,6 +10,7 @@ import {
   Image,
 } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { Input } from 'react-native-elements';
 import Modal from 'react-native-modal';
 import Toast from 'react-native-simple-toast';
@@ -26,11 +27,6 @@ const SignUp = (props) => {
   const [showRoles, setShowRoles] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    // checkNetwork();
-    // getRoles();
-  }, []);
-
   const signup = async () => {
     Keyboard.dismiss();
     setLoading(true);
@@ -43,20 +39,19 @@ const SignUp = (props) => {
       };
       let response = await API.signup(signUpParams);
       if (response.access_token) {
-          // const role = await AsyncStorage.getItem('@role');
-          const role = 'Doctor';
+          const type = await AsyncStorage.getItem('@role');
           const resetAction = CommonActions.reset({
             index: 0,
-            routes: [{ name: role === 'Doctor' ? 'DoctorDashboard' : 'Landing'}],
+            routes: [{ name: type === 'Doctor' ? 'DoctorDashboard' : 'PatientDashboard'}],
           });
           props.navigation.dispatch(resetAction);
       } else {
-        let errMsg = response.message ? response.message : "Something went wrong, Please try again!"
+        let errMsg = response.message ? response.message : 'Something went wrong, Please try again!';
         Toast.show(errMsg, Toast.LONG);
         setLoading(false);
       }
     } catch (err) {
-      console.log('Sign up ERROR CATCH', err);
+      console.log('Sign up error', err);
       setLoading(false);
     }
   };
@@ -74,8 +69,8 @@ const SignUp = (props) => {
         isVisible={showRoles}
         backdropTransitionOutTiming={0}
         onBackdropPress={() => setShowRoles(false)}>
-        <Block style={{height: '25%', paddingHorizontal: 40, borderRadius: 20}}>
-          <Text style={{paddingVertical: 15, textAlign: 'center', fontSize: 16}}>
+        <Block style={styles.popupHeader}>
+          <Text style={styles.popupHeaderText}>
             Select Roles
           </Text>
           <TouchableOpacity style={{paddingVertical: 15}}
@@ -110,15 +105,13 @@ const SignUp = (props) => {
         <Block style={styles.inputContainer}>
           <Input
             value={mobile}
-            placeholder='Mobile'
+            placeholder="Mobile"
             onChangeText={value => setMobile(value)}
             keyboardType="numeric"
           />
           <Input
             value={name}
             placeholder="Name"
-            // errorStyle={{ color: 'red' }}
-            // errorMessage='ENTER A VALID ERROR HERE'
             onChangeText={value => setName(value)}
           />
           <TouchableOpacity style={{width: '100%'}} onPress={() => setShowRoles(true)}>
@@ -201,5 +194,15 @@ const styles = StyleSheet.create({
     color: colors.$secondary,
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  popupHeader: {
+    height: '25%',
+    paddingHorizontal: 40,
+    borderRadius: 20.
+  },
+  popupHeaderText: {
+    paddingVertical: 15,
+    textAlign: 'center',
+    fontSize: 16,
   },
 });

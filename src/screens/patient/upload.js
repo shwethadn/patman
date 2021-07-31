@@ -37,11 +37,8 @@ const Upload = (props) => {
   const [showDoctor, setShowDoctor] = useState(false);
 
   let doctors = [
-    {id: 2, name: 'shwetha'},
-    {id: 4, name: 'Doc1'},
-    {id: 13, name: 'Asd'},
-    {id: 9, name: 'Mansoor'},
-    {id: 12, name: 'Doctor2'},
+    {id: 3, name: 'Doctor1'},
+    {id: 6, name: 'Doctor2'},
   ];
 
   useEffect(() => {
@@ -55,7 +52,7 @@ const Upload = (props) => {
     form_payload.append('doctor_id', doctor.id);
     if (imageResource && imageResource.uri) {
       form_payload.append('assets_attributes[0][asset]', {
-        name: type+'_image.jpg',
+        name: type + '_image.jpg',
         type: imageResource.type,
         uri:
           Platform.OS === 'android'
@@ -63,7 +60,6 @@ const Upload = (props) => {
             : imageResource.uri.replace('file://', ''),
       });
     }
-    console.log(form_payload)
     try {
       let response = await API.uploadPrescription(
         form_payload
@@ -167,7 +163,8 @@ const Upload = (props) => {
   const selectDoctor = () => {
     return(
       <Block style={{marginVertical: 20, width: '100%'}}>
-        <TouchableOpacity style={{width: '100%'}} onPress={() => setShowDoctor(true)}>
+        <TouchableOpacity style={{width: '100%'}} 
+          onPress={() => setShowDoctor(true)}>
           <Input
             value={doctor.name}
             editable={false}
@@ -176,7 +173,7 @@ const Upload = (props) => {
         </TouchableOpacity>
       </Block>
     );
-  }
+  };
 
 	const renderHeader = () => {
     return (

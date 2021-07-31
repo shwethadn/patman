@@ -1,9 +1,8 @@
 import Axios from 'axios';
-// import Config from 'react-native-config';
-
-// const API_URL = Config.API_URL;
 // const API_URL = 'https://mighty-headland-66775.herokuapp.com/api/v1/';
-const API_URL = 'https://patman.herokuapp.com/api/v1/';
+// const API_URL = 'https://patman.herokuapp.com/api/v1/';
+// const API_URL = 'https://7649396cccdc.ngrok.io/api/v1/';
+const API_URL = 'http://c32471426418.ngrok.io/api/v1';
 
 class ApiServices {
   // Set the client
@@ -57,31 +56,12 @@ class ApiServices {
       const resp = await this.client.post(path, payload, config);
       return resp.data;
     } catch (err) {
+			console.log(err.response);
       if (err.response === undefined) throw new Error('Network Error');
 			else if (err.response.status === 401) return {message: "mobile or password is wrong", success: false};
       else return err.response;
     }
   }
-
-	// async post(path, payload) {
-	// 	let token = 'CYequ1Yqqr8UCir9d66aJDExjQFiHWYghrDfjbLU23M';
-	// 	let url = API_URL+path;
-	// 	console.log(payload)
-	// 	fetch(url, { 
-	// 		method: 'POST', 
-	// 		headers: new Headers({
-	// 			'Authorization': `Bearer ${token}`, 
-	// 			'Content-Type': 'application/json, */*'
-	// 		}), 
-	// 		body: payload
-	// 	})
-	// 	.then((response) => response.json())
-	// 	.then((responseData) => {
-	// 		console.log(responseData);
-	// 	}).catch(function(err) {
-	// 		console.log(err)
-	// 	});;
-	// }
 
   // Put req
   async put(path, payload, getProgressValues) {

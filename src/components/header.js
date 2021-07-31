@@ -104,8 +104,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   headerStyle: {
-    // backgroundColor: colors.$white,
-		// backgroundColor: colors.$secondary,
 		backgroundColor: colors.$primary,
     borderBottomWidth: 1,
     borderColor: colors.$headerBorderColor,

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
-import { 
+import React, { useState } from 'react';
+import {
   StyleSheet,
   Text,
   StatusBar,
@@ -28,7 +28,7 @@ const Login = (props) => {
     setLoading(true);
     try {
       let loginParams = {
-        mobile: mobile,
+        mobile: parseInt(mobile),
         password: password,
       };
       let response = await API.login(loginParams);

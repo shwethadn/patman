@@ -7,10 +7,11 @@ import UserAPI from './user';
 
 //Store actions
 import userStore from '../store/userStore';
+import dataStore from '../store/dataStore';
 
-// const API_URL = Config.API_URL;
-// const API_URL = 'https://mighty-headland-66775.herokuapp.com/api/v1/';
-const API_URL = 'https://patman.herokuapp.com/api/v1/';
+// const API_URL = 'https://patman.herokuapp.com/api/v1/';
+// const API_URL = 'https://7649396cccdc.ngrok.io/api/v1/';
+const API_URL = 'http://c32471426418.ngrok.io/api/v1';
 
 class APIhandler {
   constructor() {
@@ -30,7 +31,6 @@ class APIhandler {
   login = async params => {
     // eslint-disable-next-line no-useless-catch
     try {
-      console.log(params);
       let response = await AuthAPI.login(params);
       if (response.access_token) {
         try {
@@ -38,7 +38,6 @@ class APIhandler {
           this.setAuthHeader(response.access_token);
           await AsyncStorage.setItem('@auth_key', response.access_token);
           let meRes = await UserAPI.me();
-          console.log("ME",meRes)
           if (meRes.response && meRes.response.type) {
             await AsyncStorage.setItem('@role', meRes.response.type);
             await AsyncStorage.setItem('@qr_code', meRes.response.qr_code);
@@ -58,12 +57,17 @@ class APIhandler {
     // eslint-disable-next-line no-useless-catch
     try {
       let response = await AuthAPI.signup(params);
+      console.log(response);
       if (response.access_token) {
         try {
           service.setAuthHeader(response.access_token);
           this.setAuthHeader(response.access_token);
           await AsyncStorage.setItem('@auth_key', response.access_token);
-          await UserAPI.me();
+          let meRes = await UserAPI.me();
+          if (meRes.response && meRes.response.type) {
+            await AsyncStorage.setItem('@role', meRes.response.type);
+            await AsyncStorage.setItem('@qr_code', meRes.response.qr_code);
+          }
         } catch (e) {
           console.log(e);
         }
@@ -102,7 +106,6 @@ class APIhandler {
     // eslint-disable-next-line no-useless-catch
     try {
       let response = await UserAPI.uploadPrescription(params);
-      console.log(response);
       return response;
     } catch (e) {
       throw e;
@@ -112,8 +115,31 @@ class APIhandler {
   requestPatient = async (params) => {
     // eslint-disable-next-line no-useless-catch
     try {
-      console.log('requestPatient', params);
       let response = await UserAPI.requestPatient(params);
+      console.log(response);
+      return response;
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  getPrescriptions = async (params) => {
+    // eslint-disable-next-line no-useless-catch
+    try {
+      let response = await UserAPI.getPrescriptions(params);
+      dataStore.setPrescriptions(response);
+      console.log(response);
+      return response;
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  getLabReports = async (params) => {
+    // eslint-disable-next-line no-useless-catch
+    try {
+      let response = await UserAPI.getLabReports(params);
+      dataStore.setLabReports(response);
       console.log(response);
       return response;
     } catch (e) {

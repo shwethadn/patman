@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
 import {
 	StyleSheet,
 	Text,
@@ -8,16 +7,11 @@ import {
 	TouchableOpacity,
 	FlatList,
 	ActivityIndicator,
-	Alert
 } from 'react-native';
-import { CommonActions } from '@react-navigation/native';
 import Block from '../../components/block';
-import Header from '../../components/header';
-import { Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { colors } from '../../utils/colors';
 import API from '../../api';
-import { TextInput } from 'react-native-gesture-handler';
 
 const LabReport = (props) => {
 
@@ -25,62 +19,25 @@ const LabReport = (props) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+		getLabReports();
   }, []);
 
-	const getApprovalDetails = () => {
-
+	const getLabReports = async () => {
+		try {
+			let params = {
+				patient_id: 2,
+			};
+      let response = await API.getLabReports(params);
+			console.log(response);
+    } catch (err) {
+      console.log('Profile ERROR CATCH', err);
+    }
 	};
 
-	const onAccept = async () => {
-		
-	}
-
-	const onReject = async () => {
-		
-	}
-
-	const acceptWarning = () => {
-		Alert.alert(
-			'Approve',
-			'Are you sure you want to approve the request?',
-			[
-				{
-					text: 'Cancel',
-					onPress: () => null,
-				},
-				{
-					text: 'Yes',
-					onPress: () => {
-						onAccept(null);
-					},
-				},
-			],
-		);
-	}
-
-	const rejectWarning = () => {
-		Alert.alert(
-			'Reject',
-			'Are you sure you want to reject the request?',
-			[
-				{
-					text: 'Cancel',
-					onPress: () => null,
-				},
-				{
-					text: 'Yes',
-					onPress: () => {
-						onReject();
-					},
-				},
-			],
-		);
-	}
-
-	const approveItem = (item, index) => {
+	const reportItem = (item, index) => {
 		return (
 			<Block style={{width: '90%'}}>
-				<Text>Approval 1</Text>
+				<Text>Approval</Text>
 			</Block>
 		);
 	};
@@ -97,19 +54,19 @@ const LabReport = (props) => {
 		);
 	};
 
-	const renderApprovalDetails= () => {
-    let apList = doctorStore.approvals;
-    if (apList) {
-      if (apList.length > 0) {
+	const renderReportDetails= () => {
+    let lrList = dataStore.labReports;
+    if (lrList) {
+      if (lrList.length > 0) {
         return (
           <Block>
             <FlatList
-              data={apList}
-              renderItem={({ item, index }) => approveItem(item, index)}
+              data={lrList}
+              renderItem={({ item, index }) => reportItem(item, index)}
               keyExtractor={(item) => item.id}
               onEndReachedThreshold={1}
               refreshing={refreshing}
-              onRefresh={() => getApprovalDetails()}
+              onRefresh={() => getLabReports()}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.flatListContainer}
@@ -130,23 +87,6 @@ const LabReport = (props) => {
         </Block>
       );
     }
-  };
-
-	const renderHeader = () => {
-    return (
-      <Header>
-				<Header.Left>
-					<TouchableOpacity style={styles.headerBack}
-						onPress={() => props.navigation.goBack()}>
-            <Icon name="angle-left" size={24} color={colors.$secondary} />
-          </TouchableOpacity>
-        </Header.Left>
-        <Header.Body>
-					<Text style={styles.headerText}>Approvals</Text>
-        </Header.Body>
-				<Header.Right/>
-      </Header>
-    );
   };
 
   return (

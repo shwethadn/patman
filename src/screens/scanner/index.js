@@ -23,15 +23,12 @@ const Scanner = (props) => {
 	};
 
 	const getPatientDetails = async (uid) => {
-		console.log("UID", uid);
 		try {
 			let uparams = {
 				uid: uid,
 			};
       let response = await API.requestPatient(uparams);
-			console.log("USER response", response.patient_data);
 			setScanData(uid);
-
 			if (response.patient_data) {
 				setPData(response.patient_data);
 			}
@@ -44,7 +41,6 @@ const Scanner = (props) => {
 		return (
 			<QRCodeScanner
         onRead={(e) => onSuccess(e)}
-        // flashMode={RNCamera.Constants.FlashMode.torch}
 				reactivateTimeout={200}
         showMarker
         markerStyle={styles.scannerMarkerStyle}
