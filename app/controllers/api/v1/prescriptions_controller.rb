@@ -15,6 +15,7 @@ class Api::V1::PrescriptionsController < Api::V1::BaseController
   # Doctor approves the uploaded prescriptions
   def approve
     prescription = Prescription.find(params[:id])
+    authorize([:api, :v1, prescription])
     if prescription.present? && !prescription.approved?
       prescription.update(approved: true)
       render json: { success: true, message: 'Prescription was approved' }

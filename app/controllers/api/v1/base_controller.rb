@@ -1,6 +1,6 @@
 class Api::V1::BaseController < ApplicationController
   before_action :doorkeeper_authorize!, except: %i[sign_up sign_in sign_out]
-  before_action :authenticate_user!, except: %i[sign_up sign_in sign_out]
+  skip_before_action :verify_authenticity_token
 
   include Pundit
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
@@ -11,6 +11,10 @@ class Api::V1::BaseController < ApplicationController
     # https://github.com/dannnylo/rtesseract
     image = RTesseract.new("/path/to/uploaded/image")
     image.to_s
+  end
+
+  def current_user
+    User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
   end
 
   private

@@ -4,6 +4,15 @@ class Patient < User
 
   after_create :generate_qr_code
 
+  has_one :qr_code, -> { where(document_type: 'qr_code') }, class_name: 'Asset',
+    as: :resource, dependent: :destroy
+
+  def profile_data
+    hash = attributes.slice('mobile', 'name', 'type', 'uid')
+    hash[:qr_code] = qr_code.asset_url
+    hash
+  end
+
   private
 
   def generate_qr_code

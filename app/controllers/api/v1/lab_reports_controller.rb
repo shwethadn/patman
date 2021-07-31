@@ -15,6 +15,7 @@ class Api::V1::LabReportsController < Api::V1::BaseController
   # Doctor approves the uploaded reports
   def approve
     lab_report = LabReport.find(params[:id])
+    authorize([:api, :v1, lab_report])
     if lab_report.present? && !lab_report.approved?
       lab_report.update(approved: true)
       render json: { success: true, message: 'Report was approved' }

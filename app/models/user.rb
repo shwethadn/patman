@@ -5,9 +5,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   devise :doorkeeper
 
-  has_one :qr_code, -> { where(document_type: 'qr_code') }, class_name: 'Asset',
-    as: :resource, dependent: :destroy
-
   before_create :add_uid
 
   def generate_access_token
@@ -48,8 +45,6 @@ class User < ApplicationRecord
   end
 
   def profile_data
-    hash = attributes.slice('mobile', 'name', 'type', 'uid')
-    hash[:qr_code] = qr_code.asset.url
-    hash
+    attributes.slice('mobile', 'name', 'type', 'uid')
   end
 end

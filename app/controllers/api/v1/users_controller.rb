@@ -1,6 +1,4 @@
 class Api::V1::UsersController < Api::V1::BaseController
-  skip_before_action :verify_authenticity_token
-
   def me
     render json: { success: true, message: 'User Data', response: current_user.profile_data }
   end
