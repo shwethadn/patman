@@ -7,14 +7,6 @@ class Api::V1::BaseController < ApplicationController
   rescue_from ::ActiveRecord::RecordNotFound, with: :record_not_found
   rescue_from ActiveRecord::StatementInvalid, with: :bad_request_error
 
-  # Invoke from background process
-  def read_text_from_image
-    # $ brew install tesseract
-    # https://github.com/dannnylo/rtesseract
-    image = RTesseract.new("/path/to/uploaded/image")
-    image.to_s
-  end
-
   def current_user
     User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
   end
