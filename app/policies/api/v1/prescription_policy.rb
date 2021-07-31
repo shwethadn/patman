@@ -12,7 +12,13 @@ class Api::V1::PrescriptionPolicy < Api::V1::ApplicationPolicy
     end
 
     def resolve
-      scope.all
+      if user.instance_of?(Doctor)
+        scope.klas.where(id: scope.patient_id).all
+      elsif user.instance_of?(Patient)
+        user.prescriptions
+      else
+        scope.klas.all
+      end
     end
   end
 end

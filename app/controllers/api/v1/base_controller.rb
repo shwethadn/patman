@@ -27,6 +27,10 @@ class Api::V1::BaseController < ApplicationController
     render json: { message: 'Record not found', ok: false }, status: :not_found
   end
 
+  def serialized_data(records, klas)
+    ActiveModel::Serializer::CollectionSerializer.new(records, serializer: klas)
+  end
+
   private
 
   def user_not_authorized

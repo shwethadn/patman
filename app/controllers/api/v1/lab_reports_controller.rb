@@ -1,6 +1,9 @@
 class Api::V1::LabReportsController < Api::V1::BaseController
   def index
-    render json: { success: true, message: 'Lab Reports', response: current_user.lab_reports }
+    scoped_lab_reports = policy_scope(OpenStruct.new(klas: LabReport, patient_id: params[:patient_id]),
+                                      policy_scope_class: Api::V1::LabReportPolicy::Scope)
+    data = serialized_data(scoped_lab_reports, Api::V1::LabReportSerializer)
+    render json: { success: true, message: 'Lab Reports', response: data }
   end
 
   def create
