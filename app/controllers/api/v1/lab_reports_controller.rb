@@ -27,6 +27,16 @@ class Api::V1::LabReportsController < Api::V1::BaseController
     end
   end
 
+  def records
+    lab_report = LabReport.find(params[:id])
+    authorize([:api, :v1, lab_report])
+    if lab_report.records.present?
+      render json: { success: true, message: 'Lab Records', response: lab_report.records }
+    else
+      render json: { success: false, message: 'No Records Found' }
+    end
+  end
+
   private
 
   def lab_report_params

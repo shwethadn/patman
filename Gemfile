@@ -13,6 +13,8 @@ gem 'mini_magick'
 gem 'devise'
 # RTesseract
 gem 'rtesseract'
+# Active Job.
+gem 'resque'
 gem 'doorkeeper'
 gem 'devise-doorkeeper'
 gem 'pundit'
