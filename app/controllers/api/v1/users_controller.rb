@@ -1,4 +1,12 @@
 class Api::V1::UsersController < Api::V1::BaseController
+  def doctors
+    render json: { success: true, message: 'Doctors List', response: Doctor.all }
+  end
+
+  def patients
+    render json: { success: true, message: 'Patients List', response: Patient.all }
+  end
+  
   def me
     render json: { success: true, message: 'User Data', response: current_user.profile_data }
   end
