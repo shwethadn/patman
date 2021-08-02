@@ -33,6 +33,7 @@ const Upload = (props) => {
   const [imageResource, setImageResource] = useState({});
   const [imageURL, setImageURL] = useState('');
   const [imageLoading, setImageLoading] = useState(false);
+  const [base64Image, setBase64Image] = useState(null);
   const [doctor, setDoctor] = useState({});
   const [showDoctor, setShowDoctor] = useState(false);
 
@@ -48,7 +49,7 @@ const Upload = (props) => {
   const uploadPrescription = async () => {
     setLoading(true);
     const form_payload = new FormData();
-    form_payload.append('patient_id', 3);
+    form_payload.append('patient_id', 2);
     form_payload.append('doctor_id', doctor.id);
     if (imageResource && imageResource.uri) {
       form_payload.append('assets_attributes[0][asset]', {
@@ -71,12 +72,42 @@ const Upload = (props) => {
       }, 100);
     } catch (e) {
       setLoading(false);
+    };
+  };
+
+  const uploadLabReport = async () => {
+    setLoading(true);
+    const form_payload = new FormData();
+    form_payload.append('patient_id', 2);
+    form_payload.append('doctor_id', doctor.id);
+    if (imageResource && imageResource.uri) {
+      form_payload.append('assets_attributes[0][asset]', {
+        name: type + '_image.jpg',
+        type: imageResource.type,
+        uri:
+          Platform.OS === 'android'
+            ? imageResource.uri
+            : imageResource.uri.replace('file://', ''),
+      });
+    }
+    try {
+      let response = await API.uploadLabReport(
+        form_payload
+      );
+      console.log(response);
+      setLoading(false);
+      setTimeout(() => {
+        props.navigation.goBack();
+      }, 100);
+    } catch (e) {
+      setLoading(false);
     }
   };
 
   const onImageChange = (photo) => {
     setImageResource(photo);
     setImageURL(photo.uri);
+    // getBase64FromUrl(photo.uri);
   };
 
   const closeNavImagePicker = () => {
@@ -91,6 +122,19 @@ const Upload = (props) => {
   const onImageLoadEnd = () => {
     setImageLoading(false);
   };
+
+  // const getBase64FromUrl = async (url) => {
+  //   const data = await fetch(url);
+  //   const blob = await data.blob();
+  //   return new Promise((resolve) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(blob);
+  //     reader.onloadend = () => {
+  //       const base64data = reader.result;
+  //       setBase64Image(base64data);
+  //     };
+  //   });
+  // };
 
   const renderImageDetails = () => {
     if (imageURL) {
@@ -114,7 +158,8 @@ const Upload = (props) => {
       );
     } else {
       return (
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => uploadPrescription()}>
+        <TouchableOpacity style={styles.buttonContainer}
+          onPress={() => type === 'Lab Report' ? uploadLabReport() : uploadPrescription()}>
           <Text style={styles.buttonText}>Upload</Text>
         </TouchableOpacity>
       );
@@ -125,7 +170,7 @@ const Upload = (props) => {
     setDoctor(d);
     setShowDoctor(false);
     toggleImagePicker(true);
-  }
+  };
 
   const doctorVal = (d) => {
     return (
@@ -135,8 +180,8 @@ const Upload = (props) => {
           {d.name}
         </Text>
       </TouchableOpacity>
-    )
-  }
+    );
+  };
 
   const selectDoctorOverlay = () => {
     return (

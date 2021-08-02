@@ -89,7 +89,8 @@ const Profile = observer((props) => {
 						style={styles.qrCode}
 						source={{
 							uri: userStore.currentUser && userStore.currentUser.qr_code ? userStore.currentUser.qr_code : qrcodeURL,
-						}}/>
+						}}
+          />
 				</Block>
 			);
 		} else {
@@ -102,7 +103,7 @@ const Profile = observer((props) => {
 			<Block row style={styles.infoContainer}>
 				<Icon style={styles.iconContainer} name={iconName} size={20} color={colors.$secondary} />
 				<Text style={styles.infoText}>
-					{userStore.currentUser.mobile}
+					{txt}
 				</Text>
 			</Block>
 		);
@@ -157,7 +158,7 @@ const Profile = observer((props) => {
 			{renderHeader()}
       <Block flex paddingX style={styles.container}>
 				{renderUserData()}
-				{renderQRcode()}
+				{/* {renderQRcode()} */}
       </Block>
     </>
   );
@@ -230,7 +231,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 	qrCode: {
-		height: 200,
-		width: 200,
+		height: 250,
+		width: 250,
 	},
 });

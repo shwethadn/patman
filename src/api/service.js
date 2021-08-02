@@ -2,7 +2,7 @@ import Axios from 'axios';
 // const API_URL = 'https://mighty-headland-66775.herokuapp.com/api/v1/';
 // const API_URL = 'https://patman.herokuapp.com/api/v1/';
 // const API_URL = 'https://7649396cccdc.ngrok.io/api/v1/';
-const API_URL = 'http://c32471426418.ngrok.io/api/v1';
+const API_URL = 'https://f91c84bcd0bb.ngrok.io/api/v1';
 
 class ApiServices {
   // Set the client
@@ -52,7 +52,6 @@ class ApiServices {
           }
         },
       };
-			console.log(payload);
       const resp = await this.client.post(path, payload, config);
       return resp.data;
     } catch (err) {

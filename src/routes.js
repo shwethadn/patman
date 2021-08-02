@@ -14,6 +14,8 @@ import DoctorDashboard from './screens/doctor';
 import DoctorApprovals from './screens/doctor/approvals';
 import PatientDashboard from './screens/patient';
 import Upload from './screens/patient/upload';
+import Records from './screens/patient/showRecords';
+import ShowImage from './screens/patient/showImage';
 
 const Stack = createStackNavigator();
 
@@ -79,6 +81,8 @@ function MyStack() {
       <Stack.Screen name="DoctorApprovals" component={DoctorApprovals} options={slideOptions} />
       <Stack.Screen name="PatientDashboard" component={PatientDashboard} options={slideOptions} />
       <Stack.Screen name="Upload" component={Upload} options={slideOptions} />
+      <Stack.Screen name="Records" component={Records} options={slideOptions} />
+      <Stack.Screen name="ShowImage" component={ShowImage} options={slideOptions} />
     </Stack.Navigator>
 	);
 }

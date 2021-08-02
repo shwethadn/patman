@@ -10,6 +10,7 @@ import { RNCamera } from 'react-native-camera';
 import { colors } from '../../utils/colors';
 import Header from '../../components/header';
 import API from '../../api';
+import { TextInput } from 'react-native-gesture-handler';
 
 const Scanner = (props) => {
 
@@ -30,7 +31,9 @@ const Scanner = (props) => {
       let response = await API.requestPatient(uparams);
 			setScanData(uid);
 			if (response.patient_data) {
+        console.log(response);
 				setPData(response.patient_data);
+        // props.navigation.navigate('PatientDashboard');
 			}
     } catch (err) {
       console.log('ERROR CATCH', err);
@@ -49,23 +52,32 @@ const Scanner = (props) => {
 		);
 	};
 
+  const userDataItem = (txt, iconName) => {
+		return (
+			<Block row style={styles.infoContainer}>
+				<Icon style={styles.iconContainer} name={iconName} size={20} color={colors.$secondary} />
+				<Text style={styles.infoText}>
+					{txt}
+				</Text>
+			</Block>
+		);
+	};
+
 	const renderUserData = () => {
 		if (pData) {
 			return (
-				<Block flex style={styles.infoContainer}>
-					<Block row style={styles.infoContainer}>
-						<Icon style={styles.iconContainer} name="user" size={20} color={colors.$secondary} />
-						<Text style={styles.infoText}>
-							{pData.name}
-						</Text>
-					</Block>
-					<Block row style={styles.infoContainer}>
-						<Icon style={styles.iconContainer} name="phone" size={20} color={colors.$secondary} />
-						<Text style={styles.infoText}>
-							{pData.mobile}
-						</Text>
-					</Block>
-				</Block>
+        <>
+          <Block flex style={styles.infoContainer}>
+            {userDataItem(pData.name, 'user')}
+            {userDataItem(pData.mobile, 'phone')}
+            <Block style={{backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center'}}>
+              <TouchableOpacity style={styles.buttonContainer}
+                onPress={() => props.navigation.navigate('PatientDashboard')}>
+                <Text style={styles.buttonText1}>Go To Patient Dashboard</Text>
+              </TouchableOpacity>
+            </Block>
+          </Block>
+				</>
 			);
 		} else {
 			return (
@@ -121,6 +133,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     padding: 32,
     color: '#777',
+  },
+  buttonContainer: {
+    width: '70%',
+    height: 40,
+    backgroundColor: colors.$secondary,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 50,
+  },
+  buttonText1: {
+    color: colors.$white,
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   textBold: {
     fontWeight: '500',

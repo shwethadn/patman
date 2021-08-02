@@ -9,6 +9,7 @@ const colors = {
   $headerBorderColor: '#e5e5e5',
   $accept: '#005500',
   $reject: '#b22222',
+  $green: '#8eea61',
 };
 
 export {colors};

@@ -11,7 +11,7 @@ import dataStore from '../store/dataStore';
 
 // const API_URL = 'https://patman.herokuapp.com/api/v1/';
 // const API_URL = 'https://7649396cccdc.ngrok.io/api/v1/';
-const API_URL = 'http://c32471426418.ngrok.io/api/v1';
+const API_URL = 'https://f91c84bcd0bb.ngrok.io/api/v1';
 
 class APIhandler {
   constructor() {
@@ -81,6 +81,7 @@ class APIhandler {
   me = async () => {
     // eslint-disable-next-line no-useless-catch
     try {
+      userStore.setCurrentUser(null);
       let meRes = await UserAPI.me();
       if (meRes.response) {
         userStore.setCurrentUser(meRes.response);
@@ -106,6 +107,16 @@ class APIhandler {
     // eslint-disable-next-line no-useless-catch
     try {
       let response = await UserAPI.uploadPrescription(params);
+      return response;
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  uploadLabReport = async (params) => {
+    // eslint-disable-next-line no-useless-catch
+    try {
+      let response = await UserAPI.uploadLabReport(params);
       return response;
     } catch (e) {
       throw e;

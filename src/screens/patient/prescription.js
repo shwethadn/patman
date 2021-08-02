@@ -13,13 +13,18 @@ import Block from '../../components/block';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { colors } from '../../utils/colors';
 import API from '../../api';
+import moment from 'moment';
+import dataStore from '../../store/dataStore';
+import { observer } from 'mobx-react';
 
-const Prescription = (props) => {
+const Prescription = observer((props) => {
 
 	const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [prescriptions, setPrescriptions] = useState(null);
 
   useEffect(() => {
+    // dataStore.setLabReports(null);
 		getPrescriptions();
   }, []);
 
@@ -29,7 +34,11 @@ const Prescription = (props) => {
 				patient_id: 2,
 			};
       let response = await API.getPrescriptions(params);
-			console.log(response);
+      if (response && response.response) {
+        setPrescriptions(response.response);
+      } else {
+        setPrescriptions([]);
+      }
     } catch (err) {
       console.log('Profile ERROR CATCH', err);
     }
@@ -37,30 +46,23 @@ const Prescription = (props) => {
 
 	const prescriptionItem = (item, index) => {
 		return (
-			<Block style={{width: '90%'}}>
-				<Text>Prescription</Text>
-			</Block>
-		);
-	};
-
-	const approveItemDemo = () => {
-		return (
-			<Block row style={styles.itemContainer}>
+			<Block row style={[styles.itemContainer, {borderColor: item.approved ? colors.$green : '#fff', borderWidth: 1}]}>
 				<TouchableOpacity style={styles.infoContainer}>
-					<Text>Doctor Name: Mansoor</Text>
-					<Text>Patient name: Lohith</Text>
-					<Text>Date: 31 Jul 2021</Text>
-				</TouchableOpacity>
+          { item.doctor_id ? (<Text>Doctor Name: {item.doctor_name}</Text>) : null}
+          { item.laboratory ? (<Text>Lab Name: {item.laboratory}</Text>) : null}
+          { item.test ? (<Text>Test: {item.test}</Text>) : null}
+          { item.created_at ? (<Text>Date: {moment(item.created_at).format('MMMM Do YYYY, h:mm:ss a')}</Text>) : null}
+        </TouchableOpacity>
 			</Block>
 		);
 	};
 
-	const renderApprovalDetails= () => {
+	const renderApprovalDetails = () => {
     let apList = dataStore.prescriptions;
     if (apList) {
       if (apList.length > 0) {
         return (
-          <Block>
+          <Block style={{marginTop: 15, width: '100%', backgroundColor: 'transparent'}}>
             <FlatList
               data={apList}
               renderItem={({ item, index }) => prescriptionItem(item, index)}
@@ -83,7 +85,7 @@ const Prescription = (props) => {
       }
     } else {
       return (
-        <Block>
+        <Block style={{marginTop: 20, width: '100%', backgroundColor: 'transparent'}}>
           <ActivityIndicator color={colors.$black} />
         </Block>
       );
@@ -98,13 +100,13 @@ const Prescription = (props) => {
         hidden={false}
       />
       <Block style={styles.container}>
-				{approveItemDemo()}
-				{approveItemDemo()}
-				{approveItemDemo()}
+        <Block style={{marginTop: 15, width: '100%', backgroundColor: 'transparent'}}>
+          {renderApprovalDetails()}
+        </Block>
       </Block>
     </>
   );
-};
+});
 
 export default Prescription;
 
@@ -152,7 +154,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 	flatListContainer: {
-    paddingHorizontal: 27,
+    paddingBottom: 20,
   },
 	itemContainer: {
 		width: '100%',
@@ -160,14 +162,16 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		marginVertical: 10,
 		alignItems: 'center',
+    backgroundColor: colors.$white,
 		// justifyContent: 'center',
 	},
 	infoContainer: {
 		borderRadius: 10,
-		width: '70%',
+		width: '100%',
 		height: '100%',
 		paddingHorizontal: 10,
 		justifyContent: 'center',
+    backgroundColor: colors.$white,
 	},
 	actionIconBlock: {
 		width: '15%',
